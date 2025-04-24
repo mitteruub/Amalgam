@@ -490,7 +490,7 @@ bool CConfigs::LoadConfig(const std::string& sConfigName, bool bNotify)
 		for ( int i = 0; i < F::Binds.m_vBinds.size( ); i++ )
 		{
 			auto& Bind = F::Binds.m_vBinds.at( i );
-			for ( auto Var : g_Vars )
+			for ( auto Var : G::Vars )
 			{
 				BINDGETVAR( bool )
 				else BINDGETVAR( int )

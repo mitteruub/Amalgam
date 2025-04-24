@@ -3389,6 +3389,8 @@ void CMenu::DrawBinds()
 				SetCursorPos({ flWidth - H::Draw.Scale(100), H::Draw.Scale(33 + 18 * i) });
 				bool bEnable = IconButton(tBind.m_bEnabled ? ICON_MD_TOGGLE_ON : ICON_MD_TOGGLE_OFF);
 
+				PopTransparent( 1, 1 );
+
 				PushFont(F::Render.FontRegular);
 				PushStyleVar(ImGuiStyleVar_WindowPadding, { H::Draw.Scale(8), H::Draw.Scale(8) });
 

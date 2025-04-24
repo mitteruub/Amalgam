@@ -56,8 +56,6 @@ public:
 	}
 };
 
-inline std::vector<CVarBase*> g_Vars;
-
 template<class T>
 inline ConfigVar<T>::ConfigVar(T value, std::string name, int iFlags)
 {
@@ -67,7 +65,7 @@ inline ConfigVar<T>::ConfigVar(T value, std::string name, int iFlags)
 	m_iType = typeid(T).hash_code();
 	m_sName = name;
 	m_iFlags = iFlags;
-	g_Vars.push_back(this);
+	G::Vars.push_back(this);
 }
 
 template<class T>
@@ -78,9 +76,9 @@ inline ConfigVar<T>::ConfigVar( T value, std::string name, std::vector<const cha
 	Map[ DEFAULT_BIND ] = value;
 	m_iType = typeid( T ).hash_code( );
 	m_sName = name;
-	g_Vars.push_back( this );
 	m_iFlags = iFlags;
 	m_vEntries = Entries;
+	G::Vars.push_back( this );
 }
 
 #define NAMESPACE_BEGIN(name)\
