@@ -46,7 +46,8 @@ bool CAutoRocketJump::SetAngles(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUser
 				if (!pLocal->IsOnGround() || pLocal->IsSwimming())
 					continue;
 
-				Vec3 vForward = tStorage.m_MoveData.m_vecVelocity.To2D().Normalized();
+				SDK::Output("Velocity", std::format("{}", tStorage.m_MoveData.m_vecVelocity.Length()).c_str());
+				Vec3 vForward = (tStorage.m_MoveData.m_vecVelocity * Vec3(1, 1, 0)).Normalized();
 				vPoint = tStorage.m_MoveData.m_vecAbsOrigin - vForward * flOffset; //- Vec3(0, 0, 20);
 				bShouldReturn = false;
 				break;
@@ -67,9 +68,9 @@ bool CAutoRocketJump::SetAngles(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUser
 		return false;
 
 	{	// correct yaw
-		Vec3 vShootPos = (tProjInfo.m_vPos - vLocalPos).To2D();
+		Vec3 vShootPos = tProjInfo.m_vPos - vLocalPos; vShootPos.z = 0;
 		Vec3 vTarget = vPoint - vLocalPos;
-		Vec3 vForward; Math::AngleVectors(tProjInfo.m_vAng, &vForward); vForward.Normalize2D();
+		Vec3 vForward; Math::AngleVectors(tProjInfo.m_vAng, &vForward); vForward.z = 0; vForward.Normalize();
 		float flA = 1.f;
 		float flB = 2 * (vShootPos.x * vForward.x + vShootPos.y * vForward.y);
 		float flC = vShootPos.Length2DSqr() - vTarget.Length2DSqr();
@@ -85,7 +86,7 @@ bool CAutoRocketJump::SetAngles(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUser
 	{	// correct pitch
 		Vec3 vShootPos = Math::RotatePoint(tProjInfo.m_vPos - vLocalPos, {}, { 0, -flYaw, 0 }); vShootPos.y = 0;
 		Vec3 vTarget = Math::RotatePoint(vPoint - vLocalPos, {}, { 0, -flYaw, 0 });
-		Vec3 vForward; Math::AngleVectors(tProjInfo.m_vAng - Vec3(0, flYaw, 0), &vForward); vForward.Normalize2D();
+		Vec3 vForward; Math::AngleVectors(tProjInfo.m_vAng - Vec3(0, flYaw, 0), &vForward); vForward.y = 0; vForward.Normalize();
 		float flA = 1.f;
 		float flB = 2 * (vShootPos.x * vForward.x + vShootPos.z * vForward.z);
 		float flC = (powf(vShootPos.x, 2) + powf(vShootPos.z, 2)) - (powf(vTarget.x, 2) + powf(vTarget.z, 2));

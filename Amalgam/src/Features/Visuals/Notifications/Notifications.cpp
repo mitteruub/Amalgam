@@ -50,7 +50,7 @@ void CNotifications::Draw()
 		H::Draw.GradientRect(x + 1, y + 1, vSize.x - 2, vSize.y - 2, tNotification.m_tBackground.Alpha(255), tNotification.m_tBackground.Alpha(127), true);
 		H::Draw.FillRect(x + 1, y + 1, H::Draw.Scale(2, Scale_Round), vSize.y - 2, tNotification.m_tAccent.Alpha(255));
 		H::Draw.LineRect(x, y, vSize.x, vSize.y, tNotification.m_tBackground.Alpha(255));
-		H::Draw.StringOutlined(fFont, x + H::Draw.Scale(13, Scale_Round), y + H::Draw.Scale(9, Scale_Round), tNotification.m_tActive.Alpha(255), Vars::Menu::Theme::Background.Value, ALIGN_TOPLEFT, tNotification.m_sText.c_str());
+		H::Draw.String(fFont, x + H::Draw.Scale(13, Scale_Round), y + H::Draw.Scale(9, Scale_Round), tNotification.m_tActive.Alpha(255), ALIGN_TOPLEFT, tNotification.m_sText.c_str());
 
 		y += (vSize.y + 8) * (1.f - flEase);
 	}

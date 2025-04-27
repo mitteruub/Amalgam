@@ -18,7 +18,7 @@ MAKE_HOOK(CHudCrosshair_GetDrawPosition, S::CHudCrosshair_GetDrawPosition(), voi
     bool bSet = false;
 
     // Handle Viewmodel Crosshair
-	if (Vars::Visuals::Viewmodel::CrosshairAim.Value && pLocal->IsAlive() && G::AimPoint.m_iTickCount)
+	if (Vars::Visuals::Viewmodel::CrosshairAim.Value && pLocal->IsAlive())
 	{
 		Vec3 vScreen;
 		if (SDK::W2S(G::AimPoint.m_vOrigin, vScreen))

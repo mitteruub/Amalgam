@@ -86,4 +86,5 @@ void CAimbot::Run(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd* pCmd)
 	RunMain(pLocal, pWeapon, pCmd);
 
 	G::Attacking = SDK::IsAttacking(pLocal, pWeapon, pCmd, true);
+	G::Target.first = 0;
 }

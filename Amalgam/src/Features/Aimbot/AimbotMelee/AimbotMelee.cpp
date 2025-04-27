@@ -638,6 +638,7 @@ bool CAimbotMelee::RunSapper(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd
 
 	for (auto& tTarget : vTargets)
 	{
+		G::AimTarget = { tTarget.m_pEntity->entindex(), I::GlobalVars->tickcount };
 		static int iLastRun = 0;
 
 		bool bShouldAim = (Vars::Aimbot::General::AimType.Value == Vars::Aimbot::General::AimTypeEnum::Silent ? iLastRun != I::GlobalVars->tickcount - 1 || G::PSilentAngles && !F::Ticks.CanChoke() : true) && Vars::Aimbot::General::AutoShoot.Value;
@@ -645,7 +646,6 @@ bool CAimbotMelee::RunSapper(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd
 
 		if (bShouldAim)
 		{
-			G::AimTarget = { tTarget.m_pEntity->entindex(), I::GlobalVars->tickcount };
 			G::AimPoint = { tTarget.m_vPos, I::GlobalVars->tickcount };
 
 			G::Attacking = true;

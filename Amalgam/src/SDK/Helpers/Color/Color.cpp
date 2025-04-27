@@ -102,7 +102,7 @@ Color_t CColor::GetEntityDrawColor(CTFPlayer* pLocal, CBaseEntity* pEntity, bool
 		}*/
 	}
 
-	if (pTarget && pTarget->entindex() == G::AimTarget.m_iEntIndex)
+	if (G::AimTarget.m_iEntIndex)
 	{
 		out = Vars::Colors::Target.Value;
 		if (pType) *pType = 6;

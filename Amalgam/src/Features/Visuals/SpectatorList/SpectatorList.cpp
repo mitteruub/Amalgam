@@ -118,6 +118,6 @@ void CSpectatorList::Draw(CTFPlayer* pLocal)
 			tColor = F::PlayerUtils.m_vTags[F::PlayerUtils.TagToIndex(CHEATER_TAG)].Color;
 		else if (FNV1A::Hash32(Spectator.m_sMode.c_str()) == FNV1A::Hash32Const("1st"))
 			tColor = tColor.Lerp({ 255, 150, 0, 255 }, 0.5f);
-		H::Draw.StringOutlined(fFont, x + iconOffset, y, tColor, Vars::Menu::Theme::Background.Value, align, std::format("{} ({} - respawn {}s)", Spectator.m_sName, Spectator.m_sMode, ceilf(Spectator.m_flRespawnIn)).c_str());
+		H::Draw.String(fFont, x + iconOffset, y, tColor, align, std::format("{} ({} - respawn {}s)", Spectator.m_sName, Spectator.m_sMode, ceilf(Spectator.m_flRespawnIn)).c_str());
 	}
 }

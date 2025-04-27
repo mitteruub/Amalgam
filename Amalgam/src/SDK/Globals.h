@@ -75,6 +75,7 @@ namespace G
 	inline MoveData_t OriginalMove = {};
 
 	inline AimTarget_t AimTarget = {};
+	inline std::pair<int, int> Target = { 0, 0 };
 	inline AimPoint_t AimPoint = {};
 
 	inline bool SilentAngles = false;

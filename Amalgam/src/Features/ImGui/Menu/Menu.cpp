@@ -3379,17 +3379,20 @@ void CMenu::DrawBinds()
 				bool bDelete = IconButton(ICON_MD_DELETE);
 
 				SetCursorPos({ flWidth - H::Draw.Scale(50), H::Draw.Scale(33 + 18 * i) });
-				bool bNot = IconButton(!tBind.m_bNot ? ICON_MD_CODE : ICON_MD_CODE_OFF);
+				if (IconButton(!tBind.m_bNot ? ICON_MD_CODE : ICON_MD_CODE_OFF))
+					tBind.m_bNot = !tBind.m_bNot;
 
 				PushTransparent(Transparent || tBind.m_iVisibility == BindVisibilityEnum::Hidden, true);
 				SetCursorPos({ flWidth - H::Draw.Scale(75), H::Draw.Scale(33 + 18 * i) });
-				bool bVisibility = IconButton( tBind.m_iVisibility == BindVisibilityEnum::Always ? ICON_MD_VISIBILITY : ICON_MD_VISIBILITY_OFF);
+				if (IconButton(tBind.m_iVisibility == BindVisibilityEnum::Always ? ICON_MD_VISIBILITY : ICON_MD_VISIBILITY_OFF))
+					tBind.m_iVisibility = (tBind.m_iVisibility + 1) % 3;
 				PopTransparent(1, 1);
 
 				SetCursorPos({ flWidth - H::Draw.Scale(100), H::Draw.Scale(33 + 18 * i) });
-				bool bEnable = IconButton(tBind.m_bEnabled ? ICON_MD_TOGGLE_ON : ICON_MD_TOGGLE_OFF);
+				if (IconButton(tBind.m_bEnabled ? ICON_MD_TOGGLE_ON : ICON_MD_TOGGLE_OFF))
+					tBind.m_bEnabled = !tBind.m_bEnabled;
 
-				PopTransparent( 1, 1 );
+				PopTransparent(1, 1);
 
 				PushFont(F::Render.FontRegular);
 				PushStyleVar(ImGuiStyleVar_WindowPadding, { H::Draw.Scale(8), H::Draw.Scale(8) });
