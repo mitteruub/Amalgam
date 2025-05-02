@@ -14,7 +14,7 @@ Enum(BindVisibility, Always, WhileActive, Hidden)
 struct Bind_t
 {
 	std::string m_sName = "";
-	CVarBase* m_pVar = nullptr;
+	BaseVar* m_pVar = nullptr;
 	bool m_bValMulti = false;
 
 	int m_iType = 0;
@@ -29,7 +29,7 @@ struct Bind_t
 
 	int m_iParent = -1;
 
-	std::vector<CVarBase*> m_vVars = {};
+	std::vector<BaseVar*> m_vVars = {};
 };
 
 class CBinds

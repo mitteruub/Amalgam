@@ -115,8 +115,8 @@ void CAimbotMelee::SimulatePlayers(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, st
 {
 	// swing prediction / auto warp
 	const int iSwingTicks = GetSwingTime(pWeapon);
-	int iMax = (iDoubletapTicks && Vars::CL_Move::Doubletap::AntiWarp.Value && pLocal->m_hGroundEntity())
-		? std::max(iSwingTicks - Vars::CL_Move::Doubletap::TickLimit.Value - 1, 0)
+	int iMax = (iDoubletapTicks && Vars::Doubletap::AntiWarp.Value && pLocal->m_hGroundEntity())
+		? std::max(iSwingTicks - Vars::Doubletap::TickLimit.Value - 1, 0)
 		: std::max(iSwingTicks, iDoubletapTicks);
 
 	if ((Vars::Aimbot::Melee::SwingPrediction.Value || iDoubletapTicks) && pWeapon->m_flSmackTime() < 0.f && iMax)
@@ -124,7 +124,7 @@ void CAimbotMelee::SimulatePlayers(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, st
 		PlayerStorage tStorage;
 		std::unordered_map<int, PlayerStorage> mStorage;
 
-		F::MoveSim.Initialize(pLocal, tStorage, false, iDoubletapTicks);
+		F::MoveSim.Initialize(pLocal, tStorage, false, !iDoubletapTicks);
 		for (auto& tTarget : vTargets)
 			F::MoveSim.Initialize(tTarget.m_pEntity, mStorage[tTarget.m_pEntity->entindex()], false);
 
@@ -452,7 +452,7 @@ void CAimbotMelee::Run(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd* pCmd
 
 	if (!F::Aimbot.m_bRunningSecondary && Vars::Aimbot::General::AimHoldsFire.Value == Vars::Aimbot::General::AimHoldsFireEnum::Always && !G::CanPrimaryAttack && G::LastUserCmd->buttons & IN_ATTACK && Vars::Aimbot::General::AimType.Value)
 		pCmd->buttons |= IN_ATTACK;
-	if (!Vars::Aimbot::General::AimType.Value)
+	if (!Vars::Aimbot::General::AimType.Value || Vars::Aimbot::General::AimType.Value == Vars::Aimbot::General::AimTypeEnum::Silent && !G::CanPrimaryAttack && pWeapon->m_flSmackTime() < 0.f)
 		return;
 
 	if (RunSapper(pLocal, pWeapon, pCmd))
@@ -463,7 +463,7 @@ void CAimbotMelee::Run(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd* pCmd
 		return;
 
 	iDoubletapTicks = F::Ticks.GetTicks(pWeapon);
-	const bool bShouldSwing = iDoubletapTicks <= (GetSwingTime(pWeapon) ? 14 : 0) || Vars::CL_Move::Doubletap::AntiWarp.Value && pLocal->m_hGroundEntity();
+	const bool bShouldSwing = iDoubletapTicks <= (GetSwingTime(pWeapon) ? 14 : 0) || Vars::Doubletap::AntiWarp.Value && pLocal->m_hGroundEntity();
 
 	Vec3 vEyePos = pLocal->GetShootPos();
 	std::unordered_map<int, std::deque<TickRecord>> pRecordMap;
@@ -638,7 +638,6 @@ bool CAimbotMelee::RunSapper(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd
 
 	for (auto& tTarget : vTargets)
 	{
-		G::AimTarget = { tTarget.m_pEntity->entindex(), I::GlobalVars->tickcount };
 		static int iLastRun = 0;
 
 		bool bShouldAim = (Vars::Aimbot::General::AimType.Value == Vars::Aimbot::General::AimTypeEnum::Silent ? iLastRun != I::GlobalVars->tickcount - 1 || G::PSilentAngles && !F::Ticks.CanChoke() : true) && Vars::Aimbot::General::AutoShoot.Value;
@@ -646,6 +645,7 @@ bool CAimbotMelee::RunSapper(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd
 
 		if (bShouldAim)
 		{
+			G::AimTarget = { tTarget.m_pEntity->entindex(), I::GlobalVars->tickcount };
 			G::AimPoint = { tTarget.m_vPos, I::GlobalVars->tickcount };
 
 			G::Attacking = true;

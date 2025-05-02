@@ -157,8 +157,8 @@ int CAimbotHitscan::GetHitboxPriority(int nHitbox, CTFPlayer* pLocal, CTFWeaponB
 			auto pSniperRifle = pWeapon->As<CTFSniperRifle>();
 
 			if (G::CanHeadshot || pLocal->InCond(TF_COND_AIMING) && (
-					pSniperRifle->GetRifleType() == RIFLE_JARATE && SDK::AttribHookValue(0, "jarate_duration", pWeapon) > 0
-					|| Vars::Aimbot::Hitscan::Modifiers.Value & Vars::Aimbot::Hitscan::ModifiersEnum::WaitForHeadshot
+				pSniperRifle->GetRifleType() == RIFLE_JARATE && SDK::AttribHookValue(0, "jarate_duration", pWeapon) > 0
+				|| Vars::Aimbot::Hitscan::Modifiers.Value & Vars::Aimbot::Hitscan::ModifiersEnum::WaitForHeadshot
 				))
 				bHeadshot = true;
 			break;
@@ -211,26 +211,26 @@ int CAimbotHitscan::GetHitboxPriority(int nHitbox, CTFPlayer* pLocal, CTFWeaponB
 		switch (nHitbox)
 		{
 		case HITBOX_SAXTON_HEAD: return bHeadshot ? 0 : 2;
-		//case HITBOX_SAXTON_NECK:
-		//case HITBOX_SAXTON_PELVIS: return 2;
+			//case HITBOX_SAXTON_NECK:
+			//case HITBOX_SAXTON_PELVIS: return 2;
 		case HITBOX_SAXTON_BODY:
 		case HITBOX_SAXTON_THORAX:
 		case HITBOX_SAXTON_CHEST:
 		case HITBOX_SAXTON_UPPER_CHEST: return bHeadshot ? 1 : 0;
-		/*
-		case HITBOX_SAXTON_LEFT_UPPER_ARM:
-		case HITBOX_SAXTON_LEFT_FOREARM:
-		case HITBOX_SAXTON_LEFT_HAND:
-		case HITBOX_SAXTON_RIGHT_UPPER_ARM:
-		case HITBOX_SAXTON_RIGHT_FOREARM:
-		case HITBOX_SAXTON_RIGHT_HAND:
-		case HITBOX_SAXTON_LEFT_THIGH:
-		case HITBOX_SAXTON_LEFT_CALF:
-		case HITBOX_SAXTON_LEFT_FOOT:
-		case HITBOX_SAXTON_RIGHT_THIGH:
-		case HITBOX_SAXTON_RIGHT_CALF:
-		case HITBOX_SAXTON_RIGHT_FOOT:
-		*/
+			/*
+			case HITBOX_SAXTON_LEFT_UPPER_ARM:
+			case HITBOX_SAXTON_LEFT_FOREARM:
+			case HITBOX_SAXTON_LEFT_HAND:
+			case HITBOX_SAXTON_RIGHT_UPPER_ARM:
+			case HITBOX_SAXTON_RIGHT_FOREARM:
+			case HITBOX_SAXTON_RIGHT_HAND:
+			case HITBOX_SAXTON_LEFT_THIGH:
+			case HITBOX_SAXTON_LEFT_CALF:
+			case HITBOX_SAXTON_LEFT_FOOT:
+			case HITBOX_SAXTON_RIGHT_THIGH:
+			case HITBOX_SAXTON_RIGHT_CALF:
+			case HITBOX_SAXTON_RIGHT_FOOT:
+			*/
 		}
 		break;
 	}
@@ -239,25 +239,25 @@ int CAimbotHitscan::GetHitboxPriority(int nHitbox, CTFPlayer* pLocal, CTFWeaponB
 		switch (nHitbox)
 		{
 		case HITBOX_HEAD: return bHeadshot ? 0 : 2;
-		//case HITBOX_PELVIS: return 2;
+			//case HITBOX_PELVIS: return 2;
 		case HITBOX_BODY:
 		case HITBOX_THORAX:
 		case HITBOX_CHEST:
 		case HITBOX_UPPER_CHEST: return bHeadshot ? 1 : 0;
-		/*
-		case HITBOX_LEFT_UPPER_ARM:
-		case HITBOX_LEFT_FOREARM:
-		case HITBOX_LEFT_HAND:
-		case HITBOX_RIGHT_UPPER_ARM:
-		case HITBOX_RIGHT_FOREARM:
-		case HITBOX_RIGHT_HAND:
-		case HITBOX_LEFT_THIGH:
-		case HITBOX_LEFT_CALF:
-		case HITBOX_LEFT_FOOT:
-		case HITBOX_RIGHT_THIGH:
-		case HITBOX_RIGHT_CALF:
-		case HITBOX_RIGHT_FOOT:
-		*/
+			/*
+			case HITBOX_LEFT_UPPER_ARM:
+			case HITBOX_LEFT_FOREARM:
+			case HITBOX_LEFT_HAND:
+			case HITBOX_RIGHT_UPPER_ARM:
+			case HITBOX_RIGHT_FOREARM:
+			case HITBOX_RIGHT_HAND:
+			case HITBOX_LEFT_THIGH:
+			case HITBOX_LEFT_CALF:
+			case HITBOX_LEFT_FOOT:
+			case HITBOX_RIGHT_THIGH:
+			case HITBOX_RIGHT_CALF:
+			case HITBOX_RIGHT_FOOT:
+			*/
 		}
 	}
 	}
@@ -724,7 +724,7 @@ void CAimbotHitscan::Run(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd* pC
 
 	if (!F::Aimbot.m_bRunningSecondary && (Vars::Aimbot::General::AimHoldsFire.Value == Vars::Aimbot::General::AimHoldsFireEnum::Always || Vars::Aimbot::General::AimHoldsFire.Value == 1 && nWeaponID == TF_WEAPON_MINIGUN) && !G::CanPrimaryAttack && G::LastUserCmd->buttons & IN_ATTACK && Vars::Aimbot::General::AimType.Value && !pWeapon->IsInReload())
 		pCmd->buttons |= IN_ATTACK;
-	if (!Vars::Aimbot::General::AimType.Value)
+	if (!Vars::Aimbot::General::AimType.Value || !G::CanPrimaryAttack && !G::Reloading && !F::Ticks.m_bDoubletap && !F::Ticks.m_bSpeedhack && Vars::Aimbot::General::AimType.Value == 3 && (nWeaponID == TF_WEAPON_MINIGUN ? pWeapon->As<CTFMinigun>()->m_iWeaponState() == AC_STATE_FIRING || pWeapon->As<CTFMinigun>()->m_iWeaponState() == AC_STATE_SPINNING : true))
 		return;
 
 	switch (nWeaponID)
@@ -772,7 +772,6 @@ void CAimbotHitscan::Run(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd* pC
 
 	for (auto& tTarget : vTargets)
 	{
-		G::AimTarget = { tTarget.m_pEntity->entindex(), I::GlobalVars->tickcount };
 		if (nWeaponID == TF_WEAPON_MEDIGUN && pWeapon->As<CWeaponMedigun>()->m_hHealingTarget().Get() == tTarget.m_pEntity)
 		{
 			if (G::LastUserCmd->buttons & IN_ATTACK)
@@ -789,6 +788,7 @@ void CAimbotHitscan::Run(CTFPlayer* pLocal, CTFWeaponBase* pWeapon, CUserCmd* pC
 			break;
 		}
 
+		G::AimTarget = { tTarget.m_pEntity->entindex(), I::GlobalVars->tickcount };
 		G::AimPoint = { tTarget.m_vPos, I::GlobalVars->tickcount };
 
 		bool bShouldFire = ShouldFire(pLocal, pWeapon, pCmd, tTarget);
