@@ -551,6 +551,8 @@ void CMenu::MenuVisuals(int iTab)
 					}
 					FColorPicker(Vars::Colors::Local, 0, FColorPickerEnum::Left);
 					FColorPicker(Vars::Colors::LocalName, 0, FColorPickerEnum::Middle);
+					FColorPicker(Vars::Colors::Friend, 0, FColorPickerEnum::Left);
+					FColorPicker(Vars::Colors::FriendName, 0, FColorPickerEnum::Middle);
 					FColorPicker(Vars::Colors::Target, 0, FColorPickerEnum::Left);
 					FColorPicker(Vars::Colors::TargetName, 0, FColorPickerEnum::Middle);
 					FColorPicker(Vars::Colors::Health, 0, FColorPickerEnum::Left);

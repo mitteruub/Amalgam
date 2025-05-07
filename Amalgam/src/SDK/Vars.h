@@ -154,7 +154,7 @@ public:
 
 #define NONE 0
 #define VISUAL (1 << 31)
-#define NOSAVE (1 << 30)
+#define NOSAVE NONE
 #define NOBIND (1 << 29)
 //#define MULTI (1 << 28)
 #define DEBUGVAR NONE
